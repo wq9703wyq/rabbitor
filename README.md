@@ -44,7 +44,13 @@ npm test
 
 ## GitHub项目须知
 
-> gitHub 上只
+> gitHub 上只上传了作者的代码，使用者clone了项目后需要安装highlight.js,font-awesome插件以及其他基本依赖
+
+## npm
+
+```bash
+npm i rabbitor -S 
+```
 
 ## 实例化
 ```javascript
