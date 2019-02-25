@@ -1,0 +1,72 @@
+.imgEdit {
+  moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select:none;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  position: relative;
+}
+.moveBlock {
+  position: absolute;
+  background: #70bfff;
+  width: 8px;
+  height: 8px;
+  z-index: 1;
+}
+.leftTop {
+  top: -5px;
+  left: -5px;
+  cursor: nw-resize;
+}
+.leftBot {
+  left: -5px;
+  bottom: -2px;
+  cursor: ne-resize;
+}
+.rightTop {
+  top: -5px;
+  right: -5px;
+  cursor: ne-resize;
+}
+.rightBot {
+  right: -5px;
+  bottom: -2px;
+  cursor: nw-resize;
+}
+.hyperlink {
+  color: #5faeff;
+  cursor: pointer;
+  transition: .3s;
+}
+.hyperlink:hover {
+  color: #3c5aff;
+}
+.tableWill {
+  border-color: #d3d3d3;
+}
+.codeZone {
+  outline: none;
+}
+.codeArea {
+  width: 98%;
+  margin: 0 auto;
+  padding: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #f7f7f7;
+  font-family: Consolas;
+}
+.codeArea:before {
+  content:counter(my);
+  font-size: 13px;
+  color: #ababab;
+  margin-right: 10px;
+}
+.codeArea {
+  counter-increment:my;
+}
