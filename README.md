@@ -25,6 +25,7 @@ npm run e2e
 
 # run all tests
 npm test
+<<<<<<< HEAD
 ```
 
 ## 介绍
@@ -77,6 +78,66 @@ return this.$getEditHtml()
 <rabbitEditor :innerHtml="内容"></rabbitEditor>
 ```
 
+=======
+```
+
+## 介绍
+
+本项目是为Vue项目而设计的富文本编辑器框架,提供以下功能：
+
+1）字体颜色、字体背景颜色、字号大小、字体、加粗、斜体、下划线、删除线、无序列表、有序列表、文本对齐、缩进等Word常用文体编辑功能
+
+2）插入链接
+
+
+3）插入表格
+
+4）插入图片以及图片拉伸
+
+5）代码段以及高亮显示
+
+## GitHub项目须知
+
+> gitHub 上只上传了作者的代码，使用者clone了项目后需要安装highlight.js,font-awesome插件以及其他基本依赖
+
+## npm
+
+```bash
+npm i rabbitor -S 
+```
+
+## 实例化
+```javascript
+<div>
+<rabbitEditor></rabbitEditor>
+</div>
+```
+
+编辑器的宽高为父元素的宽高百分比
+
+## Api
+
+#### 获取编辑器的html文本
+
+```javascript
+Vue.prototype.$getEditHtml = function () {
+    return document.getElementById('editormain').innerHTML
+  }
+```
+
+已注册在Vue的原型链中，需要使用时：
+```javascript
+return this.$getEditHtml()
+```
+
+
+#### 给编辑器设置内容
+
+```javascript
+<rabbitEditor :innerHtml="内容"></rabbitEditor>
+```
+
+>>>>>>> c51b37a5ba6ff6758c7e53c20816105241c88a53
 # 版本更新
 
 - 1.0.0   初次上传npm失败，原因未对项目打包
@@ -89,18 +150,25 @@ return this.$getEditHtml()
 
 - 1.0.4  上传使用文档
 
+<<<<<<< HEAD
 - 1.0.5  修改bug
     - 点击编辑区域后无法在其他可输入区域进行输入
     - 响应式设计改为以编辑器的宽度为标准
 
+=======
+>>>>>>> c51b37a5ba6ff6758c7e53c20816105241c88a53
 # 未来更新方向
 1. 该插件还处于测试阶段，还需要在项目实用阶段收集需要改善的问题
 
 2. 碍于作者水平，该插件的代码还不够简约漂亮，未来需要进行项目重构改善代码结构问题
 
+<<<<<<< HEAD
 3. ~~***功能更新上，较为新潮的markDown笔记是下一个目标***~~
 
 4. 更新是不可能的，这辈子都不可能的，改一下bug优化一下结构就力尽了
+=======
+3. 功能更新上，较为新潮的markDown笔记是下一个目标
+>>>>>>> c51b37a5ba6ff6758c7e53c20816105241c88a53
 
 ## 作者的话
 
