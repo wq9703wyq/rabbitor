@@ -1,6 +1,8 @@
 <template>
-  <div class="codeZone" id="codeZone" contentEditable="true" onpaste="return false">
-    <pre class="codeArea" v-html="codeLight"><br></pre>
+  <div contentEditable="false">
+    <div class="codeZone" id="codeZone" contentEditable="true" onpaste="return false" @keyup.stop="styleSet">
+      <pre class="codeArea" v-html="codeLight"><br></pre>
+    </div>
   </div>
 </template>
 
@@ -13,81 +15,7 @@ export default {
       codeLight: ''
     }
   },
-  mounted: function () {
-  },
   methods: {
-    // test4: function (e) {
-    //   // var KEY_CODE = [32, 8, 13, 37, 38, 40, 39]
-    //   // if (KEY_CODE.indexOf(e.keyCode) !== -1) {
-    //   //   return false
-    //   // }
-    //   let selection = window.getSelection()
-    //   let range = selection.getRangeAt(0)
-    //   let nowNode = range.commonAncestorContainer
-    //   let blockResult = []
-    //   let startOff = range.startOffset
-    //   let newStart = 0 // 新光标所在子节点下标
-    //   this.test5()
-    //   while (nowNode.parentNode.className !== 'core') {
-    //     nowNode = nowNode.parentNode
-    //   }
-    //   let textArray = nowNode.parentNode.textContent.split(/[\s]/)
-    //   for (let i = 0; i < textArray.length; i++) {
-    //     let temple = this.$lightCode(textArray[i])
-    //     blockResult.push(temple)
-    //   }
-    //   for (let i = 0; i < blockResult.length; i++) {
-    //     let templeDiv = document.createElement('DIV')
-    //     templeDiv.innerHTML = blockResult[i]
-    //     if (templeDiv.childNodes.length > 1) {
-    //       let templeText = templeDiv.innerText
-    //       let classResult = []
-    //       for (let j = 0; j < templeDiv.childNodes.length; j++) {
-    //         let templeNode = templeDiv.childNodes[j]
-    //         while (templeNode) {
-    //           classResult.push(templeNode.className)
-    //           templeNode = templeNode.childNodes[0]
-    //         }
-    //       }
-    //       let templeClass = classResult.join(' ')
-    //       blockResult[i] = "<span class='" + templeClass + "'>" + templeText + '</span>'
-    //     }
-    //     if (blockResult[i].indexOf('span') === -1) {
-    //       blockResult[i] = '<span>' + blockResult[i] + '</span>'
-    //     }
-    //   }
-    //   console.log(blockResult)
-    //   while (nowNode.previousSibling !== null) {
-    //     nowNode = nowNode.previousSibling
-    //     if (nowNode.nodeType !== 3) {
-    //       startOff += textArray[newStart].length
-    //       newStart++
-    //     } else if (nowNode.nodeType === 3) {
-    //       startOff++
-    //     }
-    //   }
-    //   newStart = 0
-    //   for (let i = 0; i < blockResult.length; i++) {
-    //     let templeDiv = document.createElement('DIV')
-    //     templeDiv.innerHTML = blockResult[i]
-    //     startOff = i > 0 ? startOff - 1 : startOff // 减去空格
-    //     if ((startOff - templeDiv.innerText.length) > 0) {
-    //       startOff -= templeDiv.innerText.length
-    //     } else {
-    //       newStart = i
-    //       break
-    //     }
-    //   }
-    //   newStart = newStart > 0 ? newStart + newStart : newStart
-    //   let parentNode = nowNode.parentNode
-    //   parentNode.innerHTML = blockResult.join(' ')
-    //   let minNode = parentNode.childNodes[newStart]
-    //   while (minNode.childNodes.length !== 0) {
-    //     minNode = minNode.childNodes[0]
-    //   }
-    //   range.setStart(minNode, startOff)
-    //   range.setEnd(minNode, startOff)
-    // },
     styleSet: function (e) {
       var KEY_CODE = [13, 37, 38, 40, 39, 17]
       if (KEY_CODE.indexOf(e.keyCode) !== -1) {

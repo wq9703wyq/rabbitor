@@ -1,6 +1,6 @@
 <!--suppress ALL -->
 <template>
-  <div id="editor">
+  <div id="editor" ref="rabitorEditor">
     <div class="toolbar">
       <div class="titlesize"
            @click="limitArea ? titleBool = !titleBool : ''"
@@ -90,31 +90,36 @@
       <div class="worldbold"
            :class="{selectButton: textStatus.bold, editbutton: forbidArea, forbidButton: !forbidArea}"
            title="加粗"
+           v-show="windowWidth > 560"
            @click="forbidArea ? editorEntrance('wordBold') : ''">
         <i class="fa fa-bold"></i>
       </div>
       <div class="italics"
            :class="{selectButton: textStatus.italic, editbutton: forbidArea, forbidButton: !forbidArea}"
            title="斜体"
+           v-show="windowWidth > 580"
            @click="forbidArea ? editorEntrance('italics') : ''">
         <i class="fa fa-italic"></i>
       </div>
       <div class="underline"
            :class="{selectButton: textStatus.underline, editbutton: forbidArea, forbidButton: !forbidArea}"
            title="下划线"
+           v-show="windowWidth > 600"
            @click="forbidArea ? editorEntrance('underline') : ''">
         <i class="fa fa-underline"></i>
       </div>
       <div class="strikeThrough"
            :class="{selectButton: textStatus.strike, editbutton: forbidArea, forbidButton: !forbidArea}"
            title="删除线"
+           v-show="windowWidth > 620"
            @click="forbidArea ? editorEntrance('strikeThrough') : ''">
         <i class="fa fa-strikethrough"></i>
       </div>
-      <span class="separator separatorThree">|</span>
+      <span class="separator separatorThree" v-show="windowWidth > 620">|</span>
       <div class="imageinsert"
            :class="{editbutton: limitArea, forbidButton: !limitArea}"
            @click="limitArea ? clickSimulated() : ''"
+           v-show="windowWidth > 640"
            title="插入图片">
         <i class="fa fa-file-image-o" type="file"></i>
         <input type="file"
@@ -126,26 +131,30 @@
            :class="{selectButton: textStatus.class === 'codeZone',editbutton: codeLimit('codeZone'),
            forbidButton: !codeLimit('codeZone')}"
            title="代码段"
+           v-show="windowWidth > 660"
            @click="codeLimit('codeZone') ? codeAreaSet() : ''">
         <i class="fa fa-file-code-o"></i>
       </div>
       <div class="unorderedlist"
            :class="{selectButton: textStatus.ul,editbutton: limitArea, forbidButton: !limitArea}"
            title="无序列表"
+           v-show="windowWidth > 680"
            @click="limitArea ? editorEntrance('insertUnorderedList') : ''">
         <i class="fa fa-list"></i>
       </div>
       <div class="orderedlist"
            :class="{selectButton: textStatus.ol,editbutton: limitArea, forbidButton: !limitArea}"
            title="有序列表"
+           v-show="windowWidth > 720"
            @click="limitArea ? editorEntrance('insertOrderedListSet') : ''">
         <i class="fa fa-list-ol"></i>
       </div>
-      <span class="separator separatorFour">|</span>
+      <span class="separator separatorFour" v-show="windowWidth > 760">|</span>
       <div class="alignment"
            :class="{editbutton: limitArea, forbidButton: !limitArea}"
            @click="limitArea ? (alignmentBool = !alignmentBool) : ''"
            ref="alignment"
+           v-show="windowWidth > 760"
            title="文本对齐">
         <i class="fa fa-align-left" v-show="alignment === 'left'"></i>
         <i class="fa fa-align-center" v-show="alignment === 'center'"></i>
@@ -173,17 +182,20 @@
       <div class="indent"
            :class="{editbutton: limitArea, forbidButton: !limitArea}"
            title="缩进"
+           v-show="windowWidth > 780"
            @click="limitArea ? editorEntrance('indent') : ''">
         <i class="fa fa-indent"></i>
       </div>
       <div class="outdent"
            :class="{editbutton: limitArea, forbidButton: !limitArea}"
            title="减少缩进"
+           v-show="windowWidth > 800"
            @click="limitArea ? editorEntrance('outdent') : ''">
         <i class="fa fa-outdent"></i>
       </div>
-      <span class="separator separatorFive">|</span>
+      <span class="separator separatorFive" v-show="windowWidth > 840">|</span>
       <div class="paragraph"
+           v-show="windowWidth > 840"
            :class="{selectButton: textStatus.class === 'quoteView',editbutton: codeLimit('quoteView'),
            forbidButton: !codeLimit('quoteView')}"
            @click="codeLimit('quoteView') ? paragraphSet() : ''"
@@ -192,6 +204,7 @@
       </div>
       <div class="link"
            title="链接"
+           v-show="windowWidth > 870"
            ref="link"
            @click="forbidArea && !textStatus.a ? linkBool = !linkBool : ''"
            :class="{editbutton: !textStatus.a && forbidArea,
@@ -205,6 +218,7 @@
       </div>
       <div class="form"
            title="表格"
+           v-show="windowWidth > 940"
            ref="form"
            @click="limitArea ? tableBool = !textStatus.table : ''"
            :class="{editbutton: limitArea,
@@ -218,17 +232,23 @@
         </tableset>
       </div>
       <div class="horizontalrule"
+           v-show="windowWidth > 940"
            :class="{editbutton: limitArea && !textStatus.a, forbidButton: !limitArea || textStatus.a}"
            title="分割线"
            @click="limitArea && !textStatus.a ? editorEntrance('insertHorizontalRule') : ''">
         <i class="fa fa-window-minimize"></i>
       </div>
-      <div class="moretools editbutton" title="更多" @click="toolBool = !toolBool" ref="moretools">
+      <div class="moretools editbutton"
+           title="更多"
+           v-show="windowWidth < 940"
+           @click="toolBool = !toolBool"
+           ref="moretools">
         <span>更多</span>
         <i class="fa fa-angle-down"></i>
         <div class="moreTools" v-if="toolBool" @click="stopPropagation">
           <!--分割线-->
           <div class="horizontalrule"
+               v-show="windowWidth < 940"
                :class="{editbutton: limitArea && !textStatus.a, forbidButton: !limitArea || textStatus.a}"
                title="分割线"
                @click="limitArea && !textStatus.a ? editorEntrance('insertHorizontalRule') : ''">
@@ -238,6 +258,7 @@
           <div class="form"
                title="表格"
                ref="form"
+               v-show="windowWidth < 940"
                @click="limitArea ? tableBool = !textStatus.table : ''"
                :class="{editbutton: limitArea,forbidButton: !limitArea}">
             <i class="fa fa-table"></i>
@@ -245,6 +266,7 @@
           </div>
           <!--链接-->
           <div class="link"
+               v-show="windowWidth < 870"
                title="链接"
                ref="link"
                @click="forbidArea && !textStatus.a ? linkBool = !linkBool : ''"
@@ -259,6 +281,7 @@
           </div>
           <!--引用-->
           <div class="paragraph"
+               v-show="windowWidth < 840"
                :class="{selectButton: textStatus.class === 'quoteView',editbutton: codeLimit('quoteView'),
            forbidButton: !codeLimit('quoteView')}"
                @click="codeLimit('quoteView') ? paragraphSet() : ''"
@@ -269,6 +292,7 @@
           <div class="outdent"
                :class="{editbutton: limitArea, forbidButton: !limitArea}"
                title="减少缩进"
+               v-show="windowWidth < 800"
                @click="limitArea ? editorEntrance('outdent') : ''">
             <i class="fa fa-outdent"></i>
           </div>
@@ -276,11 +300,13 @@
           <div class="indent"
                :class="{editbutton: limitArea, forbidButton: !limitArea}"
                title="缩进"
+               v-show="windowWidth < 780"
                @click="limitArea ? editorEntrance('indent') : ''">
             <i class="fa fa-indent"></i>
           </div>
           <!--文本排序-->
           <div class="alignment"
+               v-show="windowWidth < 760"
                :class="{editbutton: limitArea, forbidButton: !limitArea}"
                @click="limitArea ? (alignmentBool = !alignmentBool) : ''"
                ref="alignment"
@@ -312,6 +338,7 @@
           <div class="orderedlist"
                :class="{selectButton: textStatus.ol,editbutton: limitArea, forbidButton: !limitArea}"
                title="有序列表"
+               v-show="windowWidth < 720"
                @click="limitArea ? editorEntrance('insertOrderedListSet') : ''">
             <i class="fa fa-list-ol"></i>
           </div>
@@ -319,6 +346,7 @@
           <div class="unorderedlist"
                :class="{selectButton: textStatus.ul,editbutton: limitArea, forbidButton: !limitArea}"
                title="无序列表"
+               v-show="windowWidth < 680"
                @click="limitArea ? editorEntrance('insertUnorderedList') : ''">
             <i class="fa fa-list"></i>
           </div>
@@ -327,6 +355,7 @@
                :class="{selectButton: textStatus.class === 'codeZone',editbutton: codeLimit('codeZone'),
            forbidButton: !codeLimit('codeZone')}"
                title="代码段"
+               v-show="windowWidth < 660"
                @click="codeLimit('codeZone') ? codeAreaSet() : ''">
             <i class="fa fa-file-code-o"></i>
           </div>
@@ -334,6 +363,7 @@
           <div class="imageinsert"
                :class="{editbutton: limitArea, forbidButton: !limitArea}"
                @click="limitArea ? clickSimulated() : ''"
+               v-show="windowWidth < 640"
                title="插入图片">
             <i class="fa fa-file-image-o" type="file"></i>
             <input type="file"
@@ -345,6 +375,7 @@
           <div class="strikeThrough"
                :class="{selectButton: textStatus.strike, editbutton: forbidArea, forbidButton: !forbidArea}"
                title="删除线"
+               v-show="windowWidth < 620"
                @click="forbidArea ? editorEntrance('strikeThrough') : ''">
             <i class="fa fa-strikethrough"></i>
           </div>
@@ -352,6 +383,7 @@
           <div class="underline"
                :class="{selectButton: textStatus.underline, editbutton: forbidArea, forbidButton: !forbidArea}"
                title="下划线"
+               v-show="windowWidth < 600"
                @click="forbidArea ? editorEntrance('underline') : ''">
             <i class="fa fa-underline"></i>
           </div>
@@ -359,6 +391,7 @@
           <div class="italics"
                :class="{selectButton: textStatus.italic, editbutton: forbidArea, forbidButton: !forbidArea}"
                title="斜体"
+               v-show="windowWidth < 580"
                @click="forbidArea ? editorEntrance('italics') : ''">
             <i class="fa fa-italic"></i>
           </div>
@@ -366,6 +399,7 @@
           <div class="worldbold"
                :class="{selectButton: textStatus.bold, editbutton: forbidArea, forbidButton: !forbidArea}"
                title="加粗"
+               v-show="windowWidth < 560"
                @click="forbidArea ? editorEntrance('wordBold') : ''">
             <i class="fa fa-bold"></i>
           </div>
@@ -377,13 +411,13 @@
          id="editormain"
          spellcheck="false"
          @paste="pastionChange"
-         onpaste="return false"
-         @keydown.tab="tabListen"
-         @keydown="keyDownEdit"
-         @blur="rangeSelect"
-         @keyup="keyUpEdit"
-         @mouseup="mouseUpEdit"
-         @keypress="keyPressEdit"
+         onpast.stope="return false"
+         @keydown.tab.stop="tabListen"
+         @keydown.stop="keyDownEdit"
+         @blur.stop="rangeSelect"
+         @keyup.stop="keyUpEdit"
+         @mouseup.stop="mouseUpEdit"
+         @keypress.stop="keyPressEdit"
          v-html="innerHtml"
          ref="editormain">
     </div>
@@ -488,7 +522,8 @@ export default {
         'outdent',
         'insertOrderedListSet',
         'insertUnorderedList',
-        'insertHorizontalRule'
+        'insertHorizontalRule',
+        'formatBlock'
       ],
       LIMIT_AREA: ['quoteView', 'codeZone', 'tableOut'],
       FORBID_AREA: ['codeZone'],
@@ -505,7 +540,9 @@ export default {
         ul: false,
         class: '',
         br: ''
-      } // 光标所在文本的样式
+      }, // 光标所在文本的样式
+      windowWidth: 2000, // 屏幕宽度，用作响应式设计
+      fnResponsiveDesign: null // 用于响应式设计的节流函数，destory前注销
     }
   },
   props: {
@@ -575,35 +612,12 @@ export default {
         }
       }
       // 点击按钮以外的地方关闭列表
-      document.addEventListener('click', (e) => {
-        if (!vm.$refs.titlesize.contains(e.target)) {
-          vm.titleBool = false
-        }
-        if (!vm.$refs.wordsize.contains(e.target)) {
-          vm.wordSizeBool = false
-        }
-        if (!vm.$refs.wordname.contains(e.target)) {
-          vm.wordNameBool = false
-        }
-        if (!vm.$refs.alignment.contains(e.target)) {
-          vm.alignmentBool = false
-        }
-        if (!vm.$refs.wordcolor.contains(e.target)) {
-          vm.wordcolorBool = false
-        }
-        if (!vm.$refs.wordbackground.contains(e.target)) {
-          vm.wordBackgroundBool = false
-        }
-        if (!vm.$refs.link.contains(e.target)) {
-          vm.linkBool = false
-        }
-        if (!vm.$refs.form.contains(e.target)) {
-          vm.tableBool = false
-        }
-        if (!vm.$refs.moretools.contains(e.target)) {
-          vm.toolBool = false
-        }
-      })
+      document.addEventListener('click', vm.clickClose)
+      console.log(vm.$refs.rabitorEditor.clientWidth)
+      vm.windowWidth = vm.$refs.rabitorEditor.clientWidth
+      vm.fnResponsiveDesign = vm.throttle(vm.toolBarResponsiveDesign)
+
+      window.addEventListener('resize', vm.fnResponsiveDesign)
     },
     keyPressEdit: function (e) {
       let vm = this
@@ -640,9 +654,6 @@ export default {
       if (e.ctrlKey || e.keyCode === 17) {
         return false
       }
-      if (vm.FORBID_AREA.indexOf(vm.textStatus.class) !== -1) {
-        vm.$styleSet(e)
-      }
       try {
         vm.textStyleGet()
       } catch (e) {
@@ -661,6 +672,53 @@ export default {
       }
       vm.orderExcute()
     },
+    // 函数防抖
+    throttle (fn, wait = 50) {
+      var lastTime = 0
+      return function (...args) {
+        var newTime = +new Date()
+        if (newTime - lastTime > wait) {
+          lastTime = newTime
+          fn.apply(this, args)
+        }
+      }
+    },
+    toolBarResponsiveDesign () {
+      var vm = this
+      vm.windowWidth = vm.$refs.rabitorEditor.clientWidth
+    },
+    // 点击组件以外的空白处关闭组件
+    clickClose () {
+      var e = window.event
+      var vm = this
+      if (!vm.$refs.titlesize.contains(e.target)) {
+        vm.titleBool = false
+      }
+      if (!vm.$refs.wordsize.contains(e.target)) {
+        vm.wordSizeBool = false
+      }
+      if (!vm.$refs.wordname.contains(e.target)) {
+        vm.wordNameBool = false
+      }
+      if (!vm.$refs.alignment.contains(e.target)) {
+        vm.alignmentBool = false
+      }
+      if (!vm.$refs.wordcolor.contains(e.target)) {
+        vm.wordcolorBool = false
+      }
+      if (!vm.$refs.wordbackground.contains(e.target)) {
+        vm.wordBackgroundBool = false
+      }
+      if (!vm.$refs.link.contains(e.target)) {
+        vm.linkBool = false
+      }
+      if (!vm.$refs.form.contains(e.target)) {
+        vm.tableBool = false
+      }
+      if (!vm.$refs.moretools.contains(e.target)) {
+        vm.toolBool = false
+      }
+    },
     // 使用部分功能限制其他功能
     codeLimit: function (self) {
       let vm = this
@@ -675,10 +733,13 @@ export default {
       var selection = window.getSelection()
       vm.range = null
       vm.range = selection.getRangeAt(0).cloneRange()
-      if (vm.rangeBool) {
-        selection.removeAllRanges()
-        selection.addRange(vm.range)
-      }
+      setTimeout(() => {
+        var anchorNode = selection.anchorNode
+        if (vm.rangeBool && vm.$refs.rabitorEditor.contains(anchorNode)) {
+          selection.removeAllRanges()
+          selection.addRange(vm.range)
+        }
+      }, 0)
     },
     // 保存编辑指令
     orderSave: function (order, value) {
@@ -766,14 +827,12 @@ export default {
       var range = selection.getRangeAt(0)
       var aimEle = range.commonAncestorContainer
       var tempEle = null
-      var TAGS = ['U', 'I', 'B', 'STRIKE', 'OL', 'UL', 'BR', 'A', 'TABLE']
+      const TAGS = ['U', 'I', 'B', 'STRIKE', 'OL', 'UL', 'BR', 'A', 'TABLE']
+      const HTITLE = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
       var result = []
-      if (aimEle.nodeType === 3) {
-        aimEle = aimEle.parentNode
-      }
-      tempEle = aimEle
+      tempEle = aimEle = aimEle.nodeType === 3 ? aimEle.parentNode : aimEle
       while (tempEle.nodeName.indexOf('DIV') === -1) {
-        if (TAGS.indexOf(tempEle.nodeName) !== -1) {
+        if (TAGS.indexOf(tempEle.nodeName) !== -1 || HTITLE.indexOf(tempEle.nodeName) !== -1) {
           result.push(tempEle.nodeName)
         }
         tempEle = tempEle.parentNode
@@ -792,11 +851,17 @@ export default {
       }
       if (vm.textStatus.class !== 'codeZone') {
         let styles = window.getComputedStyle(aimEle, null)
+        let reg = /^H(\d)$/
         vm.wordSize = styles['fontSize']
         // vm.wordColor = styles['color']
         // vm.wordBackground = styles['background-color']
         vm.wordName = vm.WORD_NAME.indexOf(styles['font-family']) !== -1 ? styles['font-family'] : vm.wordName
         vm.alignment = styles['text-align']
+        if (result.indexOf(...HTITLE) !== -1) {
+          vm.titleSize = result[result.indexOf(...HTITLE)].replace(reg, '标题$1')
+        } else {
+          vm.titleSize = '普通文本'
+        }
       }
     },
     // 函数入口
@@ -840,28 +905,11 @@ export default {
     titleSizeSet: function (value) {
       var vm = this
       document.execCommand('formatBlock', false, value)
-      switch (value) {
-        case 'H1':
-          vm.titleSize = '标题1'
-          break
-        case 'H2':
-          vm.titleSize = '标题2'
-          break
-        case 'H3':
-          vm.titleSize = '标题3'
-          break
-        case 'H4':
-          vm.titleSize = '标题4'
-          break
-        case 'H5':
-          vm.titleSize = '标题5'
-          break
-        case 'H6':
-          vm.titleSize = '标题6'
-          break
-        case 'P':
-          vm.titleSize = '普通文本'
-          break
+      var reg = /^H(\d)$/
+      if (reg.test(value)) {
+        vm.titleSize = value.replace(reg, '标题$1')
+      } else {
+        vm.titleSize = '普通文本'
       }
     },
     // 文字颜色
@@ -1184,6 +1232,11 @@ export default {
     stopPropagation: function (e) {
       e.stopPropagation()
     }
+  },
+  beforeDestroy () {
+    var vm = this
+    document.removeEventListener('click', vm.clickClose)
+    window.removeEventListener('resize', vm.fnResponsiveDesign)
   }
 }
 </script>
@@ -1191,6 +1244,7 @@ export default {
 <style scoped>
   #editor {
     width: 100%;
+    min-width: 450px;
     height: 100%;
     font-family: 'Microsoft YaHei';
     text-align: left;
@@ -1300,9 +1354,6 @@ export default {
     opacity: 0;
     z-index: -3;
   }
-  .moretools {
-    display: none;
-  }
   .moreTools {
     width: 200px;
     height: 100px;
@@ -1322,125 +1373,121 @@ export default {
   .moreTools > div {
     padding: 5px;
     margin-right: 5px;
-    display: none;
   }
-  @media screen and (max-width: 940px) {
-    .horizontalrule {
-      display: none;
-    }
-    .moreTools > .horizontalrule {
-      display: block;
-    }
-    .form {
-      display: none;
-    }
-    .moreTools > .form {
-      display: block;
-    }
-    .moretools {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 870px) {
-    .link {
-      display: none;
-    }
-    .moreTools > .link {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 840px) {
-    .paragraph, .separatorFive  {
-      display: none;
-    }
-  }
-  @media screen and (max-width: 800px) {
-    .outdent {
-      display: none;
-    }
-    .moreTools > .outdent {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 780px) {
-    .indent {
-      display: none;
-    }
-    .moreTools > .indent {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 760px) {
-    .alignment, .separatorFour {
-      display: none;
-    }
-  }
-  @media screen and (max-width: 720px) {
-    .orderedlist {
-      display: none;
-    }
-    .moreTools > .orderedlist {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 680px) {
-    .unorderedlist {
-      display: none;
-    }
-    .moreTools > .unorderedlist {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 660px) {
-    .codearea {
-      display: none;
-    }
-    .moreTools > .codearea {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 640px) {
-    .imageinsert {
-      display: none;
-    }
-    .moreTools > .imageinsert {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 620px) {
-    .strikeThrough, .separatorThree {
-      display: none;
-    }
-  }
-  @media screen and (max-width: 600px) {
-    .underline {
-      display: none;
-    }
-    .moreTools > .underline {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 580px) {
-    .italics {
-      display: none;
-    }
-    .moreTools > .italics {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 560px) {
-    .worldbold {
-      display: none;
-    }
-    .moreTools > .worldbold {
-      display: block;
-    }
-  }
-  @media screen and (max-width: 450px) {
-    #editor {
-      width: 450px;
-    }
-  }
+  /*@media screen and (max-width: 940px) {*/
+    /*.moreTools > .horizontalrule {*/
+      /*display: block;*/
+    /*}*/
+    /*.form {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .form {*/
+      /*display: block;*/
+    /*}*/
+    /*.moretools {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 870px) {*/
+    /*.link {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .link {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 840px) {*/
+    /*.paragraph, .separatorFive  {*/
+      /*display: none;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 800px) {*/
+    /*.outdent {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .outdent {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 780px) {*/
+    /*.indent {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .indent {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 760px) {*/
+    /*.alignment, .separatorFour {*/
+      /*display: none;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 720px) {*/
+    /*.orderedlist {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .orderedlist {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 680px) {*/
+    /*.unorderedlist {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .unorderedlist {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 660px) {*/
+    /*.codearea {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .codearea {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 640px) {*/
+    /*.imageinsert {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .imageinsert {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 620px) {*/
+    /*.strikeThrough, .separatorThree {*/
+      /*display: none;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 600px) {*/
+    /*.underline {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .underline {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 580px) {*/
+    /*.italics {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .italics {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 560px) {*/
+    /*.worldbold {*/
+      /*display: none;*/
+    /*}*/
+    /*.moreTools > .worldbold {*/
+      /*display: block;*/
+    /*}*/
+  /*}*/
+  /*@media screen and (max-width: 450px) {*/
+    /*#editor {*/
+      /*width: 450px;*/
+    /*}*/
+  /*}*/
 </style>
 <style>
   .preSpan {
